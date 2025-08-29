@@ -1,13 +1,16 @@
-const functions = require("@google-cloud/functions-framework");
-const { HelloService } = require("./services/hello.service");
+const functions = require('@google-cloud/functions-framework');
+const { HelloService } = require('./services/hello.service');
 
-functions.cloudEvent("helloCloudEvents", (cloudevent) => {
+functions.cloudEvent('helloCloudEvents', cloudEvent => {
   HelloService.sayHello();
-  console.log(cloudevent.specversion);
-  console.log(cloudevent.type);
-  console.log(cloudevent.source);
-  console.log(cloudevent.subject);
-  console.log(cloudevent.id);
-  console.log(cloudevent.time);
-  console.log(cloudevent.datacontenttype);
+  console.log(cloudEvent.specversion);
+  console.log(cloudEvent.type);
+  console.log(cloudEvent.source);
+  console.log(cloudEvent.subject);
+  console.log(cloudEvent.id);
+  console.log(cloudEvent.time);
+  console.log(cloudEvent.datacontenttype);
+  const base64data = cloudEvent.data.message.data;
+  const decodedData = base64data ? Buffer.from(base64data, 'base64').toString() : 'No data';
+  console.log(`Mensaje de Pub/Sub: ${decodedData}`);
 });
